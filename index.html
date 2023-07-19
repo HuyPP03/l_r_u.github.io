@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <title>LRU</title>
+</head>
+<body>
+    <form action="" class="app" id="app">
+        <h2>Page Faults in LRU</h2>
+        <div class="Pages">
+            <label for="pages">Nhập tất cả các trang cách nhau bởi khoảng trắng</label>
+            <input type="text" name="pages" id="pages" class="pages" placeholder="VD: 1 2 3 4 5 6 7 8">
+        </div>
+        <div class="Capacity">
+            <label for="capacity">Nhập số lượng ô nhớ trong bộ nhớ</label>
+            <input type="text" name="capacity" id="capacity" class="capacity" placeholder="VD: 3">
+        </div>
+        <div class="Submit">
+            <button class="submit" type="button">Số lỗi trang</button>
+            <span class="input"></span>
+        </div>
+    </form>
+    <script src="start.js"></script>
+    <script>
+        function pageFaults(pages, c) {
+            // Initialize count to 0
+            let n = pages.length;
+            let count = 0;
+ 
+            // To store elements in memory of size c
+            let memory = [];
+            for (let i = 0; i < n; i++) {
+ 
+            // Find if element is present in memory or not
+            let index = memory.indexOf(pages[i]);
+ 
+            // If element is not present
+            if (index === -1) {
+ 
+            // If memory is full
+            if (memory.length === c) {
+ 
+                // Remove the first element
+                // As it is least recently used
+                memory.shift();
+            }
+ 
+                // Add the recent element into memory
+            memory.push(pages[i]);
+ 
+                // Increment the count
+            count++;
+                } else {
+ 
+                    // If element is present
+                    // Remove the element
+                    // And add it at the end as it is
+                    // the most recent element
+                    memory.splice(index, 1);
+                    memory.push(pages[i]);
+                }
+            }
+            // Return total page faults
+             return count;
+        }
+        var pages = document.querySelector('.pages');
+        var c = document.querySelector('.capacity');
+        var submit = document.querySelector('.submit');
+        var input = document.querySelector('.input');
+        submit.onclick = function(){
+            var pg = pages.value.split(' ');
+            var result = pageFaults(pg, c.value);
+            input.innerHTML = `Số lỗi trang là ${result}`;
+        }
+
+    </script>
+</body>
+</html>
